@@ -1,5 +1,5 @@
 from setup import pca
-from L298N import L298N, Motor
+from commands.l298n import L298N, Motor
 
 
 carrousselPin = [11,12]

@@ -1,6 +1,7 @@
-from time import sleep
 from typing import List 
 from adafruit_pca9685 import PCA9685 as PCA
+
+
 
 class Motor:
     def __init__(self, i2cdevice: PCA, ch1, ch2):
@@ -31,7 +32,7 @@ class L298N:
         else:
             self.rightMotor = None
 
-    def __getitem__(self):
+    def __getitem__(self, index):
         if index == 0:
             return self.leftMotor
         elif index == 1:

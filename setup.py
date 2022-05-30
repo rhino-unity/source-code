@@ -3,9 +3,6 @@ import busio
 
 from adafruit_pca9685 import PCA9685
 
-import commands
-import utils.secondsToMs
-
 # Create the I2C bus interface.
 i2c_bus = busio.I2C(SCL, SDA)
 
