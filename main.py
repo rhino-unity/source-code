@@ -1,11 +1,6 @@
 from setup import *
 
 
-# Import ServiKit
-from adafruit_servokit import ServoKit
-kit = ServoKit(channels=16)
-
-
 # jetson.inference object detection
 # import jetson.inference
 # import jetson.utils
@@ -27,7 +22,6 @@ def runGame():
             print("Game Ended")
             return
         
-
 
 while True:
     if statusGame == "standby":

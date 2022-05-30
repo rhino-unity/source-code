@@ -7,18 +7,20 @@ class Motor:
         self.chone = ch1
         self.chtwo = ch2
         self.device = i2cdevice
+        self.speedChone = 0x7FFF
+        self.speedChtwo = 0x7FFF
 
     def stop(self):
         self.device.channels[self.chone].duty_cyle = 0
         self.device.channels[self.chtwo].duty_cyle = 0
 
     def forward(self):
-        self.device.channels[self.chone].duty_cyle = 0xff
+        self.device.channels[self.chone].duty_cyle = self.speedChone
         self.device.channels[self.chtwo].duty_cyle = 0
 
     def backward(self):
         self.device.channels[self.chone].duty_cyle = 0
-        self.device.channels[self.chtwo].duty_cyle = 0xff
+        self.device.channels[self.chtwo].duty_cyle = self.speedChtwo
 
 class L298N:
     def __init__(self, i2cdevice: PCA, ch: List[int]):

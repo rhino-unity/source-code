@@ -14,3 +14,7 @@ pca = PCA9685(i2c_bus)
 
 # Set the PWM frequency to 60hz.
 pca.frequency = 60
+
+# import servo kit
+from adafruit_servokit import ServoKit
+kit = ServoKit(channels=16)
