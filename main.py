@@ -27,13 +27,12 @@ def runGame():
     while True:
         remaining = time.time() - start_time 
 
-        pca.channels[4].duty_cycle = 0x7FFF
-        pca.channels[5].duty_cycle = 0x0000
         # idk.forward()
         # idk2.backward()
 
-        # wheels.motorDepan[0].forward()
-        # wheels.motorDepan[1].forward()
+        wheels.motorDepan
+        
+
 
         # wheels.motorDepan
 
