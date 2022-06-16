@@ -64,7 +64,7 @@ while True:
     kit.servo[12].angle = 180
 
     sleep(1)
-    kit.servo[12].angle = 0
+    kit.servo[12].angle = 180
     sleep(1)
     print("PCA", pca)
     wheels.backward()
@@ -86,7 +86,8 @@ while True:
 
     pca.channels[13].duty_cycle = 0x0000
     pca.channels[14].duty_cycle = 0x0000 # naik
-
+    pca.channels[0].duty_cycle = 0x0000
+    pca.channels[1].duty_cycle = 0x0000 # naik
     # sleep(2)
 
     # pca.channels[13].duty_cycle = 0x000

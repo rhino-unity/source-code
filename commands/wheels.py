@@ -27,8 +27,31 @@ class Wheels:
         pca.channels[10].duty_cycle = 0x000
         pca.channels[11].duty_cycle = 0x000
 
-    def rotate360toRight(self):
-        pass
+    def rotateCounterClockwise(self):
+        pca.channels[4].duty_cycle = 0x0000
+        pca.channels[5].duty_cycle = 0xAFFF
+
+        pca.channels[6].duty_cycle = 0xAFFF
+        pca.channels[7].duty_cycle = 0x0000
+
+        pca.channels[8].duty_cycle = 0xAFFF
+        pca.channels[9].duty_cycle = 0x0000
+
+        pca.channels[10].duty_cycle = 0x0000
+        pca.channels[11].duty_cycle = 0xAFFF
+
+    def rotateClockwise(self, speed=0xAFFF):
+        pca.channels[4].duty_cycle = speed
+        pca.channels[5].duty_cycle = 0x000
+
+        pca.channels[6].duty_cycle = 0x0000
+        pca.channels[7].duty_cycle = speed
+
+        pca.channels[8].duty_cycle = 0x0000
+        pca.channels[9].duty_cycle = speed
+
+        pca.channels[10].duty_cycle = speed
+        pca.channels[11].duty_cycle = 0x0000
 
     def serongKanan(self):
         pca.channels[6].duty_cycle = 0x000
@@ -73,21 +96,21 @@ class Wheels:
         pca.channels[10].duty_cycle = 0x000
         pca.channels[11].duty_cycle = 0xFFFE
 
-    def forward(self):
-        pca.channels[6].duty_cycle = 0xFFFE
+    def forward(self, speed = 0xFFFE):
+        pca.channels[6].duty_cycle = speed
         pca.channels[7].duty_cycle = 0x000
 
-        pca.channels[4].duty_cycle = 0xFFFE
+        pca.channels[4].duty_cycle = speed
         pca.channels[5].duty_cycle = 0x000
 
 
-        pca.channels[8].duty_cycle = 0xFFFE
+        pca.channels[8].duty_cycle = speed
         pca.channels[9].duty_cycle = 0x000
 
-        pca.channels[10].duty_cycle = 0xFFFE
+        pca.channels[10].duty_cycle = speed
         pca.channels[11].duty_cycle = 0x000
 
-        pca.channels[2].duty_cycle = 0xFFFE
+        pca.channels[2].duty_cycle = speed
         pca.channels[3].duty_cycle = 0x0000
 
 

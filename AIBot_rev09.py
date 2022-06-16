@@ -54,8 +54,8 @@ pca.channels[3].duty_cycle = 0x0000 # motor OFF saat awal standby, nilai channel
 pca.channels[8].duty_cycle = 0x0000 # LED 1 OFF
 pca.channels[9].duty_cycle = 0x0000 # LED 2 OFF
 pca.channels[10].duty_cycle = 0x0000 # LED 3 OFF 
-kit.servo[14].angle = 45 # servo untuk lengan naik turun (posisi awal 45 derajat) (level 1 = 0 derajat, level 2 = 45 drajat, level 3 = 90 derajat) 
-kit.servo[15].angle = 90 # servo untuk jari gripper (posisi awal menutup = 90) (posisi membuka = 0)
+ # servo untuk lengan naik turun (posisi awal 45 derajat) (level 1 = 0 derajat, level 2 = 45 drajat, level 3 = 90 derajat) 
+kit.servo[12].angle = 90 # servo untuk jari gripper (posisi awal menutup = 90) (posisi membuka = 0)
 
 IdObjekTerdeteksi = 0 # ID objek yang terdeteksi (ID class objek hasil training jetson inference)
 posisiObjekTerdeteksi = 0 # adalah variabel nilai dalam bentuk bilangan hasil tampilan kamera
@@ -92,17 +92,17 @@ while display.IsOpen():
         posisiObjekTerdeteksi = detection.Left # titik acuan posisi objek terdeteksi adalah titik sisi kiri objek
         print("ID objek yang terdeteksi",IdObjekTerdeteksi)
 
-        if IdObjekTerdeteksi == 3: # 3 adalah ID untuk objek kubus hasil training jetson inference 
+        if IdObjekTerdeteksi == 3 or IdObjekTerdeteksi == 1: # 3 adalah ID untuk objek kubus hasil training jetson inference 
             print('objek kubus terdeteksi')
             if posisiObjekTerdeteksi > 0 and posisiObjekTerdeteksi < 400:
                 #print('Objek di kiri')
                 statusObjekTerdeteksi = "Objek di kiri"
                 # pca.channels[8].duty_cycle = 0x7FFF # LED1 ON
-            if posisiObjekTerdeteksi > 400 and posisiObjekTerdeteksi < 800:
+            if posisiObjekTerdeteksi > 400 and posisiObjekTerdeteksi < 600:
                 #print('Objek di tengah')
                 statusObjekTerdeteksi = "Objek di tengah"
                 # pca.channels[9].duty_cycle = 0x7FFF # LED2 ON
-            if posisiObjekTerdeteksi > 800 and posisiObjekTerdeteksi < 1280:
+            if posisiObjekTerdeteksi > 600 and posisiObjekTerdeteksi < 1280:
                 #print('Objek di kanan')
                 statusObjekTerdeteksi = "Objek di kanan"
                 # pca.channels[10].duty_cycle = 0x7FFF # LED3 ON
@@ -184,24 +184,24 @@ while display.IsOpen():
                 pca.channels[1].duty_cycle = 0x0000 # motor ON
                 pca.channels[2].duty_cycle = 0x0000 # motor ON
                 pca.channels[3].duty_cycle = 0x0000 # motor ON
-                kit.servo[14].angle = 0
-                kit.servo[15].angle = 0
+                
+                kit.servo[12].angle = 0
             if levelShippingHub == 2 :
                 print("motor lengan bergerak ke shiping hub level 2")
                 pca.channels[0].duty_cycle = 0x7FFF # motor ON
                 pca.channels[1].duty_cycle = 0x0000 # motor ON
                 pca.channels[2].duty_cycle = 0x0000 # motor ON
                 pca.channels[3].duty_cycle = 0x7FFF # motor ON
-                kit.servo[14].angle = 45
-                kit.servo[15].angle = 0
+                
+                kit.servo[12].angle = 0
             if levelShippingHub == 3 :
                 print("motor lengan bergerak ke shiping hub level 3")
                 pca.channels[0].duty_cycle = 0x0000 # motor ON
                 pca.channels[1].duty_cycle = 0x0000 # motor ON
                 pca.channels[2].duty_cycle = 0x0000 # motor ON
                 pca.channels[3].duty_cycle = 0x7FFF # motor ON
-                kit.servo[14].angle = 90
-                kit.servo[15].angle = 0
+                
+                kit.servo[12].angle = 0
 
             print("Selanjutnya ke Warehouse atau ke Carousel ? ...")
 
@@ -265,12 +265,12 @@ while display.IsOpen():
             setDurasiWaktuPutarKanan = 15
             if durasiWaktu[10] < setDurasiWaktuPutarKanan :
                 print("berputar ke kanan")  
-                pca.channels[0].duty_cycle = 0x0000 # motor ON
-                pca.channels[1].duty_cycle = 0x5FFF # motor ON
-                pca.channels[2].duty_cycle = 0x0000 # motor ON
-                pca.channels[3].duty_cycle = 0x5FFF # motor ON
+                wheels.rotateClockwise()
                 durasiWaktu[10] = durasiWaktu[10] + 1
-                if statusObjekTerdeteksi == "Objek di tengah" :
+                if statusObjekTerdeteksi == "Objek di tengah":
+                    print("berhenti") 
+
+                    wheels.stop()
                     durasiWaktu[10] = (1000) #durasi selesai
                     durasiWaktu[11] = (1000) #durasi selesai
             if durasiWaktu[10] == setDurasiWaktuPutarKanan :
@@ -278,14 +278,13 @@ while display.IsOpen():
 
             # Selanjutnya Robot berputar ke kiri selama 15 detik
             setDurasiWaktuPutarKiri = 15
-            if durasiWaktu[10] == 1000 and durasiWaktu[11] < setDurasiWaktuPutarKiri :
+            if durasiWaktu[10] == 1000 and durasiWaktu[11] < setDurasiWaktuPutarKiri:
                 print("berputar ke kiri") 
-                pca.channels[0].duty_cycle = 0x5FFF # motor ON
-                pca.channels[1].duty_cycle = 0x0000 # motor ON
-                pca.channels[2].duty_cycle = 0x5FFF # motor ON
-                pca.channels[3].duty_cycle = 0x0000 # motor ON
+                wheels.rotateCounterClockwise()
                 durasiWaktu[11] = durasiWaktu[11] + 1
                 if statusObjekTerdeteksi == "Objek di tengah" :
+                    print("berhenti") 
+
                     durasiWaktu[10] = (1000) # durasi selesai
                     durasiWaktu[11] = (1000) # durasi selesai
             if durasiWaktu[11] == setDurasiWaktuPutarKiri :
@@ -293,59 +292,62 @@ while display.IsOpen():
 
             # Seluruh urutan durasi waktu selesai, robot melanjutkan 
             if durasiWaktu[10] == 1000 and durasiWaktu[11] == 1000 :
+                durasiMaju = 1
+                if durasiWaktu[13] < durasiMaju:
+                    wheels.forward(0x7FFF)
+                    durasiMaju = durasiMaju+1
+                elif durasiWaktu[13] >= durasiMaju:
+                    wheels.stop()
+                
                 setDurasiWaktuJariAmbilObjek = 2 # saat durasi 2 detik servo jari akan mengambil objek
                 setAkhirWaktusebelumUlangLagi = 10 # setelah 10 detik akan mengulang lagi mencari objek
                 if durasiWaktu[12] < setDurasiWaktuJariAmbilObjek : 
-                    print("berhenti") 
-                    pca.channels[0].duty_cycle = 0x0000 # motor OFF
-                    pca.channels[1].duty_cycle = 0x0000 # motor OFF
-                    pca.channels[2].duty_cycle = 0x0000 # motor OFF
-                    pca.channels[3].duty_cycle = 0x0000 # motor OFF
                     print("Jari membuka untuk mengambil objek kubus")
-                    kit.servo[14].angle = 140
-                    kit.servo[15].angle = 0		
+                    
+                    kit.servo[12].angle = 0		
                 if durasiWaktu[12] == setDurasiWaktuJariAmbilObjek :
                     # Servo		
-                    kit.servo[14].angle = 45 
-                    kit.servo[15].angle = 140
+                     
+                    kit.servo[12].angle = 140
                 if durasiWaktu[12] == setDurasiWaktuJariAmbilObjek + 2 : 
                     # Servo jari menutup
                     print("Jari menutup mengambil objek kubus")
-                    kit.servo[15].angle = 0
+                    kit.servo[12].angle = 0
                 if durasiWaktu[12] == setDurasiWaktuJariAmbilObjek + 3 : 
                     # Servo naik
-                    kit.servo[14].angle = 140
-                if durasiWaktu[12] > setDurasiWaktuJariAmbilObjek and hitungWaktu < 124 :
-                    # Robot maju dan delivery objek ... coding diubah sesuai kebutuhan
-                    # Harus ada sensor microswitch 
-                    print("Robot bacaLidar")
-                    f = open("demofile2.txt", "r")
-                    print(f.read())
-                    hasilBacaLidarFloat = []
-                    g = open('demofile2.txt')
-                    for line in g.readlines():
-                        hasilBacaLidarFloat = float(line)
-                    g.close()
+                    pass
+                    
+                # if durasiWaktu[12] > setDurasiWaktuJariAmbilObjek and hitungWaktu < 124 :
+                #     # Robot maju dan delivery objek ... coding diubah sesuai kebutuhan
+                #     # Harus ada sensor microswitch 
+                #     print("Robot bacaLidar")
+                #     f = open("demofile2.txt", "r")
+                #     print(f.read())
+                #     hasilBacaLidarFloat = []
+                #     g = open('demofile2.txt')
+                #     for line in g.readlines():
+                #         hasilBacaLidarFloat = float(line)
+                #     g.close()
 
-                    ValidDataLidar = (isinstance(hasilBacaLidarFloat, float))
+                #     ValidDataLidar = (isinstance(hasilBacaLidarFloat, float))
 
-                    if ValidDataLidar == True :
-                        if hasilBacaLidarFloat > 700 :
-                            print("Tidak ada rintangan .. Robot maju")
-                            pca.channels[0].duty_cycle = 0x0000 # motor ON
-                            pca.channels[1].duty_cycle = 0x7FFF # motor ON
-                            pca.channels[2].duty_cycle = 0x7FFF # motor ON
-                            pca.channels[3].duty_cycle = 0x0000 # motor ON
-                        if hasilBacaLidarFloat < 700 :
-                            print("Ada rintangan .. Robot Menghindar ")
-                            pca.channels[0].duty_cycle = 0x7FFF # motor ON
-                            pca.channels[1].duty_cycle = 0x0000 # motor ON
-                            pca.channels[2].duty_cycle = 0x7FFF # motor ON
-                            pca.channels[3].duty_cycle = 0x0000 # motor ON
+                #     if ValidDataLidar == True :
+                #         if hasilBacaLidarFloat > 700 :
+                #             print("Tidak ada rintangan .. Robot maju")
+                #             pca.channels[0].duty_cycle = 0x0000 # motor ON
+                #             pca.channels[1].duty_cycle = 0x7FFF # motor ON
+                #             pca.channels[2].duty_cycle = 0x7FFF # motor ON
+                #             pca.channels[3].duty_cycle = 0x0000 # motor ON
+                #         if hasilBacaLidarFloat < 700 :
+                #             print("Ada rintangan .. Robot Menghindar ")
+                #             pca.channels[0].duty_cycle = 0x7FFF # motor ON
+                #             pca.channels[1].duty_cycle = 0x0000 # motor ON
+                #             pca.channels[2].duty_cycle = 0x7FFF # motor ON
+                #             pca.channels[3].duty_cycle = 0x0000 # motor ON
                     
                 durasiWaktu[12] = durasiWaktu[12] + 1
                 if durasiWaktu[12] == setAkhirWaktusebelumUlangLagi :
-                    kit.servo[15].angle = 0
+                    kit.servo[12].angle = 0
                     statusObjekTerdeteksi = "Tidak ada objek" # Reset variabel statusObjekTerdeteksi 
                     durasiWaktu[10] = (0) # durasi loop lagi
                     durasiWaktu[11] = (0) # durasi loop lagi
@@ -396,8 +398,8 @@ while display.IsOpen():
             pca.channels[8].duty_cycle = 0x0000 # LED 1 OFF
             pca.channels[9].duty_cycle = 0x0000 # LED 2 OFF
             pca.channels[10].duty_cycle = 0x0000 # LED 3 OFF 
-            kit.servo[14].angle = 45 # servo untuk lengan naik turun (posisi awal 45 derajat) 
-            kit.servo[15].angle = 90 # servo untuk jari gripper (posisi awal menutup = 90)
+             # servo untuk lengan naik turun (posisi awal 45 derajat) 
+            kit.servo[12].angle = 90 # servo untuk jari gripper (posisi awal menutup = 90)
             IdObjekTerdeteksi = 0 # kembali ke 0
             posisiObjekTerdeteksi = 0 # kembali ke 0
             statusObjekTerdeteksi = "" # kembali ke 0
