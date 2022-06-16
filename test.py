@@ -8,6 +8,7 @@ print("importing parts")
 from board import SCL, SDA
 import busio
 import os 
+import math
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 print(__dirname__.replace("/source-code", ""),__file__)
@@ -58,36 +59,63 @@ print("System begins to run!")
 
 # pca.channels[10].duty_cycle = 0x0000
 # pca.channels[11].duty_cycle = 0x0000
+
+def setSpeed(percentage: float):
+    max = 65535
+    half = math.floor(max/2)
+
+    val = percentage * max
+
+    return hex(val)
+
+def findDistance(topPos):
+    val = 60 * topPos / 580
+
+    return math.floor(val)
+
+def setDuration(topPos):
+    pass
+
 wheels = Wheels(pca)
 print("System runs!")
 while True:
-    kit.servo[12].angle = 180
+    # kit.servo[12].angle = 0
 
-    sleep(1)
-    kit.servo[12].angle = 180
-    sleep(1)
-    print("PCA", pca)
-    wheels.backward()
+    # sleep(2)
+    # kit.servo[12].angle = 180
+    # sleep(1)
+    # print("PCA", pca)
+    # wheels.backward()
 
-    print("Testing Front Wheels to go backward")
+    # sleep(1)
 
-    print("Rotate clockwise")
-    pca.channels[4].duty_cycle = 0xAFFF
-    pca.channels[5].duty_cycle = 0x000
+    # wheels.rotateClockwise()
+    # sleep(2)
 
-    pca.channels[6].duty_cycle = 0x0000
-    pca.channels[7].duty_cycle = 0xAFFF
+    # wheels.rotateCounterClockwise()
+    # sleep(2)
+    # print("Testing Front Wheels to go backward")
 
-    pca.channels[8].duty_cycle = 0x0000
-    pca.channels[9].duty_cycle = 0xAFFF
+    # print("Rotate clockwise")
+    # pca.channels[4].duty_cycle = 0xAFFF
+    # pca.channels[5].duty_cycle = 0x000
 
-    pca.channels[10].duty_cycle = 0xAFFF
-    pca.channels[11].duty_cycle = 0x0000
+    # pca.channels[6].duty_cycle = 0x0000
+    # pca.channels[7].duty_cycle = 0xAFFF
 
-    pca.channels[13].duty_cycle = 0x0000
-    pca.channels[14].duty_cycle = 0x0000 # naik
-    pca.channels[0].duty_cycle = 0x0000
-    pca.channels[1].duty_cycle = 0x0000 # naik
+    # pca.channels[8].duty_cycle = 0x0000
+    # pca.channels[9].duty_cycle = 0xAFFF
+
+    # pca.channels[10].duty_cycle = 0xAFFF
+    # pca.channels[11].duty_cycle = 0x0000
+
+    # pca.channels[13].duty_cycle = 0x0000
+    # pca.channels[14].duty_cycle = 0x7FFF # naik
+    # pca.channels[0].duty_cycle = 0x0000
+    # pca.channels[1].duty_cycle = 0x0000 # naik
+
+    wheels.forward(0xFFFF)
+
     # sleep(2)
 
     # pca.channels[13].duty_cycle = 0x000

@@ -55,7 +55,7 @@ pca.channels[8].duty_cycle = 0x0000 # LED 1 OFF
 pca.channels[9].duty_cycle = 0x0000 # LED 2 OFF
 pca.channels[10].duty_cycle = 0x0000 # LED 3 OFF 
  # servo untuk lengan naik turun (posisi awal 45 derajat) (level 1 = 0 derajat, level 2 = 45 drajat, level 3 = 90 derajat) 
-kit.servo[12].angle = 0 # servo untuk jari gripper (posisi awal menutup = 90) (posisi membuka = 0)
+kit.servo[12].angle = 180 # servo untuk jari gripper (posisi awal menutup = 90) (posisi membuka = 0)
 
 IdObjekTerdeteksi = 0 # ID objek yang terdeteksi (ID class objek hasil training jetson inference)
 posisiObjekTerdeteksi = 0 # adalah variabel nilai dalam bentuk bilangan hasil tampilan kamera
@@ -305,96 +305,14 @@ while display.IsOpen():
                 else:
                     print("Berhenti")
                     durasiWaktu[12] = 0
+                    durasiWaktu[13] = 0
                     wheels.stop()
-                
-                setDurasiWaktuJariAmbilObjek = 1 # saat durasi 2 detik servo jari akan mengambil objek
-                setAkhirWaktusebelumUlangLagi = 10 # setelah 10 detik akan mengulang lagi mencari objek
-                if durasiWaktu[12] < setDurasiWaktuJariAmbilObjek : 
-                    print("Jari membuka untuk mengambil objek kubus")
-                    
-                    kit.servo[12].angle = 180		
-                if durasiWaktu[12] == setDurasiWaktuJariAmbilObjek + 1 : 
-                    # Servo jari menutup
-                    print("Jari menutup mengambil objek kubus")
-                    kit.servo[12].angle = 0
-                if durasiWaktu[12] == setDurasiWaktuJariAmbilObjek + 3 : 
-                    # Servo naik
-                    pca.channels[13].duty_cycle = 0x0000
-                    pca.channels[14].duty_cycle = 0x7FFF
-
-                if durasiWaktu[12] == setDurasiWaktuJariAmbilObjek + 4:
-                    pca.channels[13].duty_cycle = 0x0000
-                    pca.channels[14].duty_cycle = 0x0000
-                    
-                    
-                # if durasiWaktu[12] > setDurasiWaktuJariAmbilObjek and hitungWaktu < 124 :
-                #     # Robot maju dan delivery objek ... coding diubah sesuai kebutuhan
-                #     # Harus ada sensor microswitch 
-                #     print("Robot bacaLidar")
-                #     f = open("demofile2.txt", "r")
-                #     print(f.read())
-                #     hasilBacaLidarFloat = []
-                #     g = open('demofile2.txt')
-                #     for line in g.readlines():
-                #         hasilBacaLidarFloat = float(line)
-                #     g.close()
-
-                #     ValidDataLidar = (isinstance(hasilBacaLidarFloat, float))
-
-                #     if ValidDataLidar == True :
-                #         if hasilBacaLidarFloat > 700 :
-                #             print("Tidak ada rintangan .. Robot maju")
-                #             pca.channels[0].duty_cycle = 0x0000 # motor ON
-                #             pca.channels[1].duty_cycle = 0x7FFF # motor ON
-                #             pca.channels[2].duty_cycle = 0x7FFF # motor ON
-                #             pca.channels[3].duty_cycle = 0x0000 # motor ON
-                #         if hasilBacaLidarFloat < 700 :
-                #             print("Ada rintangan .. Robot Menghindar ")
-                #             pca.channels[0].duty_cycle = 0x7FFF # motor ON
-                #             pca.channels[1].duty_cycle = 0x0000 # motor ON
-                #             pca.channels[2].duty_cycle = 0x7FFF # motor ON
-                #             pca.channels[3].duty_cycle = 0x0000 # motor ON
-                    
-                durasiWaktu[12] = durasiWaktu[12] + 1
-                
-                if durasiWaktu[12] == setAkhirWaktusebelumUlangLagi :
-                    kit.servo[12].angle = 0
-                    statusObjekTerdeteksi = "Tidak ada objek" # Reset variabel statusObjekTerdeteksi 
-                    durasiWaktu[10] = (0) # durasi loop lagi
-                    durasiWaktu[11] = (0) # durasi loop lagi
-                    durasiWaktu[12] = (0) # durasi loop lagi
-                    durasiWaktu[13] = (0)
 
 
         if hitungWaktu == 125 :				
             hitungWaktu = 35 # posisi awal hitungwaktu diulang menuju awal autonomous 2
 
-        """
-        # Memasuki End Game Period Running
-        if hitungWaktu == 125 :
-            print("Memasuki End Game Period Running")
-            print("Robot memutar Carousel atau bergerak mengambil dan delivery objek")
-            print("Robot parking sebelum waktu autonomous 2 berakhir")
-            pca.channels[0].duty_cycle = 0x7FFF # motor ON
-            pca.channels[1].duty_cycle = 0x0000 # motor ON
-            pca.channels[2].duty_cycle = 0x0000 # motor ON
-            pca.channels[3].duty_cycle = 0x7FFF # motor ON
-
-        # Robot parking
-        if hitungWaktu == 154 :
-            print("Robot parking")
-            pca.channels[0].duty_cycle = 0x0000 # motor OFF
-            pca.channels[1].duty_cycle = 0x0000 # motor OFF
-            pca.channels[2].duty_cycle = 0x0000 # motor OFF
-            pca.channels[3].duty_cycle = 0x0000 # motor OFF
-
-        # Game Over
-        if hitungWaktu == 155 :
-            print("End Autonomous 2")
-            print("-- Game Over --")
-
-        """
-
+    
         # End Program Robot selama game berlangsung **********************************************************************************
 
         # Mulai Lagi

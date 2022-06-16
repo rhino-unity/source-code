@@ -27,18 +27,18 @@ class Wheels:
         pca.channels[10].duty_cycle = 0x000
         pca.channels[11].duty_cycle = 0x000
 
-    def rotateCounterClockwise(self):
+    def rotateCounterClockwise(self,  speed=0xAFFF):
         pca.channels[4].duty_cycle = 0x0000
-        pca.channels[5].duty_cycle = 0xAFFF
+        pca.channels[5].duty_cycle = speed
 
-        pca.channels[6].duty_cycle = 0xAFFF
+        pca.channels[6].duty_cycle = speed
         pca.channels[7].duty_cycle = 0x0000
 
-        pca.channels[8].duty_cycle = 0xAFFF
+        pca.channels[8].duty_cycle = speed
         pca.channels[9].duty_cycle = 0x0000
 
         pca.channels[10].duty_cycle = 0x0000
-        pca.channels[11].duty_cycle = 0xAFFF
+        pca.channels[11].duty_cycle = speed
 
     def rotateClockwise(self, speed=0xAFFF):
         pca.channels[4].duty_cycle = speed
